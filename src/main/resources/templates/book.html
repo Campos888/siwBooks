@@ -3,6 +3,14 @@
   <head>
     <title>Book</title>
     <link rel="stylesheet" href="/stile.css?version=2" />
+    <style>
+      .rating {
+        font-family: monospace;
+        font-weight: bold;
+        color: #333;
+        margin-left: 10px;
+      }
+    </style>
   </head>
 
   <body>
@@ -10,11 +18,16 @@
     <div th:if="${book}">
       <h1 th:text="${book.title}">bookTitle</h1>
 
+      <!-- Book image (optional) -->
+      <!--
       <div>
-        <img th:src="${book.urlImage}" alt="bookimage" width="300" />
+        <img th:src="${book.urlImages}" alt="bookimage" width="300" />
       </div>
+      -->
 
-      <p><strong>PublicationYear:</strong> <span th:text="${book.publicationYear}"></span></p>
+      <p><strong>Publication Year:</strong>
+        <span th:text="${book.publicationYear}"></span>
+      </p>
 
       <h2>Autori del libro</h2>
       <ul>
@@ -23,6 +36,42 @@
         </li>
       </ul>
     </div>
+
+    <!-- ✅ COMMENTS SECTION -->
+    <hr/>
+    <h2>Reviews</h2>
+
+    <div th:if="${book.reviews != null and !book.reviews.isEmpty()}">
+      <ul>
+        <li th:each="review : ${book.reviews}">
+          <strong th:text="${review.user.credentials.username}">Username</strong>:
+          <span th:text="${review.text}">Review text</span>
+		  <span class="rating" th:text="${'[' + review.evaluation + '/5]'}">[5/5]</span>
+
+          <br/>
+          <small th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}"></small>
+        </li>
+      </ul>
+    </div>
+
+    <div th:unless="${book.reviews != null and !book.reviews.isEmpty()}">
+      <p>No reviews yet. Be the first to review!</p>
+    </div>
+
+    <!-- ✅ COMMENT FORM -->
+    <hr/>
+    <h3>Add a Review</h3>
+    <form action="/addReview" method="post">
+      <input type="hidden" name="bookId" th:value="${book.id}" />
+
+      <label for="text">Review:</label><br/>
+      <textarea name="text" rows="4" cols="50" placeholder="Write your review..." required></textarea><br/>
+
+      <label for="evaluation">Rating (1–5):</label><br/>
+      <input type="number" name="evaluation" min="1" max="5" required/><br/><br/>
+
+      <button type="submit">Post</button>
+    </form>
 
     <div th:unless="${book}">
       <p>Non esiste</p>

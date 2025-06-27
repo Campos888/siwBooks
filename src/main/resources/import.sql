@@ -28,3 +28,17 @@ INSERT INTO book_authors (books_id, authors_id) VALUES(3, 3);
 INSERT INTO book_authors (books_id, authors_id) VALUES(4, 3);
 INSERT INTO book_authors (books_id, authors_id) VALUES(5, 4);
 INSERT INTO book_authors (books_id, authors_id) VALUES(6, 5);
+
+
+
+--admin password:"a"
+INSERT INTO users (id, name, surname, email) VALUES (nextval('users_seq'), 'admin', 'admin', 'admin@admin.com');
+INSERT INTO credentials (id, username, password, role, user_id) VALUES (nextval('credentials_seq'), 'admin','$2a$10$t2IKSFIwQXZPe4GtNGpzuu5DlTYFIYBIy1lUbxyNYbm0MS2YpFQU.','ADMIN', currval('users_seq'));
+
+
+
+
+--users password:"p"
+INSERT INTO users (id, name, surname, email) VALUES (nextval('users_seq'), 'p', 'p', 'p');
+INSERT INTO credentials (id, username, password, role, user_id) VALUES (nextval('credentials_seq'), 'p','$2a$10$yo5IFu4/ET4S7P8Fe5KEZeRPiARzRDw.VaCg4NR4rXMRFG1j2xZli','DEFAULT', currval('users_seq'));
+

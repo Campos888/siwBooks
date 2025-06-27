@@ -1,4 +1,4 @@
-package merialdProject.utils;
+package merialdoProject.utils;
 
 
 import java.util.Locale;

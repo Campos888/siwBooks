@@ -12,6 +12,27 @@
     <li><a href="/books">Books</a></li>
     <li><a href="/authors">Authors</a></li>
   </ul>
+  
+  
+
+   <!-- logut solo se sei loggato -->
+    <div sec:authorize="isAuthenticated()">
+      <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+    
+
+    <!-- login solo se non sei loggato puoi loggarti-->
+     <div sec:authorize="!isAuthenticated()">
+       <a href="/login">Login</a>
+     </div>
+
+  <!-- login solo se non sei loggato puoi registrarti-->
+   <div sec:authorize="!isAuthenticated()">
+     	<a href="/register">Register</a>
+   </div>
+
 
   
   
