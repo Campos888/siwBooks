@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Author Details</title>
+</head>
+<body>
+
+<h1>Dettagli dell'autore</h1>
+
+<!-- Author info -->
+<div>
+    <p><strong>Nome:</strong> <span th:text="${author.name}"></span></p>
+    <p><strong>Cognome:</strong> <span th:text="${author.surname}"></span></p>
+    <p><strong>Data di nascita:</strong> <span th:text="${author.bornDate}"></span></p>
+    <p><strong>Data di morte:</strong> <span th:text="${author.deathDate != null ? author.deathDate : 'Ancora vivo'}"></span></p>
+	<p>
+	  Nazionalità: <span th:text="${author.nationality}"></span>
+	  <img th:src="'https://flagcdn.com/24x18/' + ${countryCode} + '.png'" 
+	       alt="Flag" 
+	       style="margin-left: 8px; vertical-align: middle;">
+	</p>
+
+</div>
+
+<hr>
+
+<h2>Libri scritti</h2>
+
+<ul>
+    <li th:each="book : ${author.books}">
+        <strong th:text="${book.title}"></strong> (<span th:text="${book.publicationYear}"></span>)
+    </li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Authors</title>
+  </head>
+
+  <body>
+	
+    <h1>Authors</h1>
+    <ul>
+      <li th:each="author : ${authors}">
+        <a th:href="@{'/author' + '/' + ${author.id}}"
+           th:text="${author.name} + ' ' + ${author.surname}">Author name and surname</a>
+      </li>
+    </ul>
+  </body>
+
+</html>
