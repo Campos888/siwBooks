@@ -30,7 +30,7 @@ public class Book {
 		private Integer publicationYear;
 		
 		@NotBlank
-		private String Title;
+		private String title;
 		
 		@Column(name = "url_images")
 		private List<String> urlImages;
@@ -62,11 +62,11 @@ public class Book {
 		}
 
 		public String getTitle() {
-			return Title;
+			return title;
 		}
 
 		public void setTitle(String title) {
-			Title = title;
+			this.title = title;
 		}
 
 		public List<String> getUrlImages() {
@@ -98,7 +98,7 @@ public class Book {
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(Title, authors, publicationYear);
+			return Objects.hash(title, authors, publicationYear);
 		}
 
 		@Override
@@ -110,7 +110,7 @@ public class Book {
 			if (getClass() != obj.getClass())
 				return false;
 			Book other = (Book) obj;
-			return Objects.equals(Title, other.Title) && Objects.equals(authors, other.authors)
+			return Objects.equals(title, other.title) && Objects.equals(authors, other.authors)
 					&& Objects.equals(publicationYear, other.publicationYear);
 		}
 		

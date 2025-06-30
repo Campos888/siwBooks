@@ -29,12 +29,16 @@
         <span th:text="${book.publicationYear}"></span>
       </p>
 
-      <h2>Autori del libro</h2>
-      <ul>
-        <li th:each="author : ${book.authors}">
-          <strong th:text="${author.name + ' ' + author.surname}"></strong>
-        </li>
-      </ul>
+	  <h2>Autori del libro</h2>
+	  <ul>
+		<li th:each="author : ${book.authors}">
+			      <a th:href="@{/author/{id}(id=${author.id})}">
+			        <span th:text="${author.name}">Author Name</span>
+			      </a>
+		</li>		  
+	  </ul>
+
+	  
     </div>
 
     <!-- ✅ COMMENTS SECTION -->
@@ -47,10 +51,14 @@
           <strong th:text="${review.user.credentials.username}">Username</strong>:
           <span th:text="${review.text}">Review text</span>
 		  <span class="rating" th:text="${'[' + review.evaluation + '/5]'}">[5/5]</span>
-
+			
           <br/>
           <small th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}"></small>
-        </li>
+		  
+
+
+		  </li>
+        
       </ul>
     </div>
 
