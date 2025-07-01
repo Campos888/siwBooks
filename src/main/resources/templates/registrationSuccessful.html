@@ -1,11 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Success</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registrazione avvenuta con successo</title>
+    <style>
+        :root {
+            --muted-gold: #B8860B;
+            --warm-cream: #FDF5E6;
+            --text-dark: #1A0F0A;
+            --rich-burgundy: #4A1C1C;
+            --shadow-card: 0 6px 20px rgba(28, 24, 20, 0.25);
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #2C1810 0%, #3D2317 30%, #654321 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+        .success-container {
+            background: linear-gradient(145deg, var(--warm-cream) 0%, #F5F5DC 100%);
+            padding: 3rem 4rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-card);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(184, 134, 11, 0.3);
+        }
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--rich-burgundy);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+        p {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--rich-burgundy);
+        }
+        a {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--muted-gold);
+            color: var(--warm-cream);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+        a:hover {
+            background-color: #D4AF37;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-<h2>Registration successful!</h2>
-<p>Welcome, <span th:text="${user.name}"></span>!</p>
-<a th:href="@{/login}">Go to login</a>
+    <div class="success-container" role="main" aria-label="Pagina di registrazione avvenuta con successo">
+        <h2>Registrazione avvenuta con successo!</h2>
+        <p>Benvenuto, <span th:text="${user.name}"></span>!</p>
+        <a th:href="@{/login}">Vai al login</a>
+    </div>
 </body>
 </html>

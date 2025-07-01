@@ -1,89 +1,70 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Book</title>
-    <link rel="stylesheet" href="/stile.css?version=2" />
-    <style>
-      .rating {
-        font-family: monospace;
-        font-weight: bold;
-        color: #333;
-        margin-left: 10px;
-      }
-    </style>
-  </head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${book != null ? book.title + ' - Dettagli' : 'Libro non trovato'}">Dettagli Libro</title>
+	<link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Libri</a></li>
+                <li><a href="/authors">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <body>
+    <!-- Main Content -->
+    <main class="container">
+        <div th:if="${book}">
+            <div class="book-details">
+                <!-- Immagine del libro -->
+                <div class="book-image">
+					<img th:if="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
+					     th:src="@{/${book.urlImages[0]}}" 
+					     th:alt="${book.title}"
+					     width="300" />
 
-    <div th:if="${book}">
-      <h1 th:text="${book.title}">bookTitle</h1>
+                    <div th:unless="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
+                         style="width: 300px; height: 400px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #666;">
+                        📚<br>Copertina non disponibile
+                    </div>
+                </div>
 
-      <!-- Book image (optional) -->
-      <!--
-      <div>
-        <img th:src="${book.urlImages}" alt="bookimage" width="300" />
-      </div>
-      -->
+                <!-- Informazioni del libro -->
+                <div class="book-info">
+                    <h1 th:text="${book.title}">Titolo del Libro</h1>
+                    
+                    <div class="book-meta">
+                        <p><strong>Anno di pubblicazione:</strong> 
+                           <span th:text="${book.publicationYear}">Anno</span></p>
+                    </div>
 
-      <p><strong>Publication Year:</strong>
-        <span th:text="${book.publicationYear}"></span>
-      </p>
+                    <h2>Autori del libro</h2>
+                    <ul class="books-list">
+                        <li th:each="author : ${book.authors}">
+                            <strong th:text="${author.name + ' ' + author.surname}">Nome Autore</strong>
+                            <a th:href="@{/author/{id}(id=${author.id})}"
+                               style="margin-left: 10px; color: var(--primary-color); text-decoration: none;">
+                                → Vedi profilo autore
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-	  <h2>Autori del libro</h2>
-	  <ul>
-		<li th:each="author : ${book.authors}">
-			      <a th:href="@{/author/{id}(id=${author.id})}">
-			        <span th:text="${author.name}">Author Name</span>
-			      </a>
-		</li>		  
-	  </ul>
-
-	  
-    </div>
-
-    <!-- ✅ COMMENTS SECTION -->
-    <hr/>
-    <h2>Reviews</h2>
-
-    <div th:if="${book.reviews != null and !book.reviews.isEmpty()}">
-      <ul>
-        <li th:each="review : ${book.reviews}">
-          <strong th:text="${review.user.credentials.username}">Username</strong>:
-          <span th:text="${review.text}">Review text</span>
-		  <span class="rating" th:text="${'[' + review.evaluation + '/5]'}">[5/5]</span>
-			
-          <br/>
-          <small th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}"></small>
-		  
-
-
-		  </li>
-        
-      </ul>
-    </div>
-
-    <div th:unless="${book.reviews != null and !book.reviews.isEmpty()}">
-      <p>No reviews yet. Be the first to review!</p>
-    </div>
-
-    <!-- ✅ COMMENT FORM -->
-    <hr/>
-    <h3>Add a Review</h3>
-    <form action="/addReview" method="post">
-      <input type="hidden" name="bookId" th:value="${book.id}" />
-
-      <label for="text">Review:</label><br/>
-      <textarea name="text" rows="4" cols="50" placeholder="Write your review..." required></textarea><br/>
-
-      <label for="evaluation">Rating (1–5):</label><br/>
-      <input type="number" name="evaluation" min="1" max="5" required/><br/><br/>
-
-      <button type="submit">Post</button>
-    </form>
-
-    <div th:unless="${book}">
-      <p>Non esiste</p>
-    </div>
-
-  </body>
+        <div th:unless="${book}" class="error-message">
+            <p>Libro non trovato</p>
+            <a href="/books" style="color: var(--primary-color); text-decoration: none;">
+                ← Torna alla lista dei libri
+            </a>
+        </div>
+    </main>
+</body>
 </html>

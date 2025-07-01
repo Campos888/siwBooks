@@ -3,16 +3,63 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <title>Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Libreria Online - Home</title>
+	<link rel="stylesheet" th:href="@{/stile.css}" />
+
 </head>
 <body>
-  <h1>Home Page</h1>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Libri</a></li>
+                <li><a href="/authors">Autori</a></li>
+            </ul>
+        </nav>
 
-  <ul>
-    <li><a href="/books">Books</a></li>
-    <li><a href="/authors">Authors</a></li>
-  </ul>
-  
+        <!-- Barra di ricerca grande e full-width sotto la nav -->
+        <form class="search-bar-fullwidth" role="search" aria-label="Ricerca libri" method="GET" action="/search">
+            <input
+                type="search"
+                name="query"
+                placeholder="Cerca un libro o un autore..."
+                aria-label="Cerca"
+                required
+            />
+            <button type="submit" aria-label="Avvia ricerca">🔍</button>
+        </form>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="home-hero">
+            <h1>Benvenuto nella nostra Libreria</h1>
+            <p>Scopri migliaia di libri e conosci i loro autori</p>
+        </div>
+
+        <div class="home-links">
+            <a href="/books" class="home-card">
+                <h3>Esplora i Libri</h3>
+                <p>Cerca tra la nostra vasta collezione di libri</p>
+            </a>
+            <a href="/authors" class="home-card">
+                <h3>Scopri gli Autori</h3>
+                <p>Conosci gli scrittori delle tue opere preferite</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- Inserisci qui il JS -->
+    <script>
+      document.querySelector('input[name="query"]').addEventListener('focus', function() {
+        console.log("Hai cliccato sulla barra di ricerca!");
+      });
+    </script>
+
   
 
    <!-- logut solo se sei loggato -->
@@ -35,8 +82,6 @@
 
 
   
-  
-	
 	
 	
 </body>

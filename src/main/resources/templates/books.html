@@ -1,21 +1,56 @@
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Books</title>
-  </head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutti i Libri - Libreria Online</title>
+	<link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Libri</a></li>
+                <li><a href="/authors">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <body>
-	
-    <h1>Books</h1>
-    <ul>
-      <li th:each="book : ${books}">
-        <a th:href="@{'/book' + '/' + ${book.id}}"
-           th:text="${book.title}">Book title</a>
-      </li>
-    </ul>
-	
+    <!-- Main Content -->
+    <main class="container">
+        <h1>I Nostri Libri</h1>
+        
+      
+		<div class="elegant-collection">
+		    <a th:each="book, bookStat : ${books}"
+		       th:href="@{'/book/' + ${book.id}}"
+		       class="collection-item"
+		       data-icon="📖"
+		       data-category="classics">
+		        <div class="item-number" th:text="${bookStat.count}">01</div>
+		        <div class="item-content">
+		            <h3 class="item-title" th:text="${book.title}">Titolo del Libro</h3>
+		            <p class="item-author"
+		               th:each="author : ${book.authors}"
+		               th:text="${author.name + ' ' + author.surname}">Autore</p>
+		        
+		            <span class="item-year" th:text="${book.publicationYear}">Anno</span>
+		        </div>
+		    </a>
+		</div>
 
-  </body>
-
+        <!-- Fallback per lista semplice se preferisci -->
+        <!-- 
+        <ul class="simple-list">
+            <li th:each="book : ${books}">
+                <a th:href="@{'/book/' + ${book.id}}" 
+                   th:text="${book.title}">Titolo del Libro</a>
+            </li>
+        </ul>
+        -->
+    </main>
+</body>
 </html>

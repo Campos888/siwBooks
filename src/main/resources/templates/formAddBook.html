@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Book</title>
+	<link rel="stylesheet" th:href="@{/stile.css}" />
 </head>
 <body>
 	<form th:action="@{/admin/addBook}" method="post" th:object="${book}">

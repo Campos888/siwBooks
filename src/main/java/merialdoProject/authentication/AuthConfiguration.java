@@ -1,6 +1,5 @@
 package merialdoProject.authentication;
 
-
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,10 +29,15 @@ public class AuthConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/", "/index","/books","/authors", "/author/{id}", "/book/{id}", "/login", "/register", "/css/**", "/images/**", "/favicon.ico").permitAll()
+                // Permetti accesso alle risorse statiche senza login
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                // Permetti GET alle pagine pubbliche
+                .requestMatchers(HttpMethod.GET, "/", "/index", "/books", "/authors", "/author/*", "/book/*", "/login", "/register").permitAll()
+                // Permetti POST per login e registrazione
                 .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/admin/**").hasAuthority(ADMIN_ROLE)
-                 .requestMatchers(HttpMethod.POST, "/admin/**").hasAuthority(ADMIN_ROLE)
+                // Admin solo con ruolo ADMIN_ROLE
+                .requestMatchers("/admin/**").hasAuthority(ADMIN_ROLE)
+                // Tutte le altre richieste richiedono autenticazione
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -50,14 +54,11 @@ public class AuthConfiguration {
                 .permitAll()
             )
             .exceptionHandling(ex -> ex.accessDeniedPage("/login"))
-            .csrf(csrf -> csrf.disable()); // Enable CSRF if needed
+            .csrf(csrf -> csrf.disable()); // Abilita CSRF se necessario
 
         return http.build();
     }
 
-    /**
-     * Custom authentication using JDBC with custom SQL queries
-     */
     @Bean
     public UserDetailsService userDetailsService() {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
@@ -71,7 +72,6 @@ public class AuthConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    // Expose AuthenticationManager bean if needed for manual auth
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

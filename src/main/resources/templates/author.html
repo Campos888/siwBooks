@@ -1,36 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Author Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${author != null ? author.name + ' ' + author.surname + ' - Dettagli' : 'Autore non trovato'}">Dettagli Autore</title>
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Text:wght@400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/stile.css}" />
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Libri</a></li>
+                <li><a href="/authors">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<h1>Dettagli dell'autore</h1>
+    <!-- Main Content -->
+    <main class="container">
+        <div th:if="${author}">
+            <h1 th:text="${author.name + ' ' + author.surname}">Nome Autore</h1>
 
-<!-- Author info -->
-<div>
-    <p><strong>Nome:</strong> <span th:text="${author.name}"></span></p>
-    <p><strong>Cognome:</strong> <span th:text="${author.surname}"></span></p>
-    <p><strong>Data di nascita:</strong> <span th:text="${author.bornDate}"></span></p>
-    <p><strong>Data di morte:</strong> <span th:text="${author.deathDate != null ? author.deathDate : 'Ancora vivo'}"></span></p>
-	<p>
-	  Nazionalità: <span th:text="${author.nationality}"></span>
-	  <img th:src="'https://flagcdn.com/24x18/' + ${countryCode} + '.png'" 
-	       alt="Flag" 
-	       style="margin-left: 8px; vertical-align: middle;">
-	</p>
+            <!-- Informazioni dell'autore -->
+            <div class="author-details">
+                <div class="author-info">
+                    <p><strong>Nome:</strong> <span th:text="${author.name}">Nome</span></p>
+                    <p><strong>Cognome:</strong> <span th:text="${author.surname}">Cognome</span></p>
+                    <p><strong>Data di nascita:</strong> <span th:text="${author.bornDate}">Data nascita</span></p>
+                    <p><strong>Data di morte:</strong> 
+                       <span th:text="${author.deathDate != null ? author.deathDate : 'Ancora vivo'}">Stato</span></p>
+                    <p th:if="${author.nationality}">
+                        <strong>Nazionalità:</strong> 
+                        <span th:text="${author.nationality}">Nazionalità</span>
+                        <img th:if="${countryCode}" 
+                             th:src="'https://flagcdn.com/24x18/' + ${countryCode} + '.png'"
+                             alt="Bandiera"
+                             class="flag">
+                    </p>
+                </div>
+            </div>
 
-</div>
+            <h2>Libri scritti</h2>
+            <ul class="books-list">
+                <li th:each="book : ${author.books}">
+                    <strong th:text="${book.title}">Titolo libro</strong> 
+                    (<span th:text="${book.publicationYear}">Anno</span>)
+                    <a th:href="@{'/book/' + ${book.id}}" 
+                       style="margin-left: 10px; color: var(--primary-color); text-decoration: none;">
+                        → Vedi dettagli libro
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-<hr>
-
-<h2>Libri scritti</h2>
-
-<ul>
-    <li th:each="book : ${author.books}">
-        <strong th:text="${book.title}"></strong> (<span th:text="${book.publicationYear}"></span>)
-    </li>
-</ul>
-
+        <div th:unless="${author}" class="error-message">
+            <p>Autore non trovato</p>
+            <a href="/authors" style="color: var(--primary-color); text-decoration: none;">
+                ← Torna alla lista degli autori
+            </a>
+        </div>
+    </main>
 </body>
 </html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${libro.titolo}">Dettaglio Libro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Text:wght@400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/stile.css}" />
+
+	<style>
+        /* Reset più aggressivo per evitare conflitti */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Reset specifico per i link */
+        a, a:link, a:visited, a:hover, a:active {
+            text-decoration: none !important;
+            color: inherit !important;
+        }
+
+        :root {
+            --dark-mahogany: #2C1810;
+            --deep-brown: #3D2317;
+            --rich-burgundy: #4A1C1C;
+            --antique-brass: #8B6914;
+            --muted-gold: #B8860B;
+            --aged-leather: #654321;
+            --parchment-beige: #F5F5DC;
+            --warm-cream: #FDF5E6;
+            --soft-amber: #D4AF37;
+            --candlelight: #FFEAA7;
+            --text-dark: #1A0F0A;
+            --text-medium: #3D2317;
+            --shadow-elegant: 0 8px 32px rgba(28, 24, 20, 0.3);
+            --shadow-deep: 0 12px 48px rgba(28, 24, 20, 0.4);
+            --shadow-card: 0 6px 20px rgba(28, 24, 20, 0.25);
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes gentleGlow {
+            0%, 100% { 
+                text-shadow: 0 0 8px rgba(180, 134, 11, 0.3); 
+            }
+            50% { 
+                text-shadow: 0 0 16px rgba(180, 134, 11, 0.5); 
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bookFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-10px) rotate(2deg); 
+            }
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--dark-mahogany) 0%, var(--deep-brown) 30%, var(--aged-leather) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Decorazioni di sfondo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(180, 134, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header elegante */
+        .header {
+            background: linear-gradient(135deg, var(--dark-mahogany) 0%, var(--rich-burgundy) 100%);
+            box-shadow: var(--shadow-deep);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--muted-gold);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--candlelight) !important;
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: var(--transition-smooth);
+            animation: gentleGlow 4s infinite ease-in-out;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--soft-amber) !important;
+        }
+
+        .logo::before {
+            content: '📚';
+            font-size: 1.8rem;
+            filter: sepia(1) hue-rotate(20deg) saturate(1.2);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-family: 'Cinzel', serif;
+            text-decoration: none !important;
+            color: var(--warm-cream) !important;
+            font-weight: 400;
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--soft-amber) !important;
+            background: rgba(180, 134, 11, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Container principale */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 3rem;
+            background: linear-gradient(145deg, var(--warm-cream) 0%, var(--parchment-beige) 100%);
+            border-radius: 20px;
+            box-shadow: var(--shadow-elegant);
+            position: relative;
+            border: 1px solid rgba(180, 134, 11, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+            overflow: hidden;
+        }
+
+        /* Decorazioni del container */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--muted-gold), var(--soft-amber), var(--muted-gold));
+            z-index: 1;
+        }
+
+        .container::after {
+            content: '📖';
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 3rem;
+            opacity: 0.1;
+            filter: sepia(1) hue-rotate(20deg) saturate(1.2);
+            z-index: 1;
+        }
+
+        /* Breadcrumb elegante */
+        .breadcrumb {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            color: var(--aged-leather);
+            margin-bottom: 3rem;
+            padding: 1rem 0;
+            border-bottom: 1px dotted var(--muted-gold);
+            position: relative;
+            z-index: 2;
+        }
+
+        .breadcrumb a {
+            color: var(--aged-leather) !important;
+            text-decoration: none !important;
+            transition: var(--transition-smooth);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--muted-gold) !important;
+            background: rgba(180, 134, 11, 0.1);
+        }
+
+        /* Layout principale del libro */
+        .book-detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Sezione copertina */
+        .book-cover-section {
+            animation: slideInLeft 0.8s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .book-cover-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .book-cover {
+            max-width: 100%;
+            width: 320px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow-deep);
+            transition: var(--transition-smooth);
+            border: 4px solid var(--muted-gold);
+            animation: bookFloat 6s ease-in-out infinite;
+        }
+
+        .book-cover:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: var(--shadow-deep), 0 0 40px rgba(180, 134, 11, 0.4);
+            animation-play-state: paused;
+        }
+
+        /* Cornici decorative */
+        .cover-frame {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 2px solid var(--soft-amber);
+            border-radius: 20px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid var(--muted-gold);
+            border-radius: 25px;
+            opacity: 0.6;
+        }
+
+        /* Sezione informazioni */
+        .book-info-section {
+            animation: slideInRight 0.8s ease-out;
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
+        }
+
+        .book-title {
+            font-family: 'Cinzel', serif;
+            color: var(--dark-mahogany);
+            font-size: 3.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .book-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--muted-gold), var(--soft-amber));
+            border-radius: 2px;
+        }
+
+        .book-title::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: -30px;
+            font-size: 4rem;
+            color: var(--muted-gold);
+            opacity: 0.3;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Metadati del libro */
+        .book-meta {
+            background: linear-gradient(145deg, var(--aged-leather) 0%, var(--deep-brown) 100%);
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-card);
+            border: 2px solid var(--muted-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-meta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--soft-amber), var(--candlelight), var(--soft-amber));
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: var(--warm-cream);
+            font-size: 1.3rem;
+            padding: 0.5rem 0;
+        }
+
+        .meta-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .meta-label {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: var(--candlelight);
+            margin-right: 1.5rem;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .meta-label::before {
+            font-size: 1.8rem;
+            filter: sepia(1) hue-rotate(20deg) saturate(1.2);
+        }
+
+        .meta-label.year::before {
+            content: '📅';
+        }
+
+        .meta-value {
+            font-family: 'Crimson Text', serif;
+            color: var(--parchment-beige);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Sezione autori */
+        .authors-section {
+            background: linear-gradient(145deg, var(--parchment-beige) 0%, var(--warm-cream) 50%, var(--parchment-beige) 100%);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-card);
+            border: 2px solid var(--muted-gold);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+            animation-delay: 0.6s;
+            animation-fill-mode: both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .authors-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--muted-gold), var(--soft-amber), var(--muted-gold));
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: var(--dark-mahogany);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+        }
+
+        .section-title::before {
+            content: '✍️';
+            font-size: 2rem;
+            filter: sepia(1) hue-rotate(20deg) saturate(1.2);
+        }
+
+        .authors-list {
+            list-style: none;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .author-item {
+            background: linear-gradient(145deg, var(--warm-cream) 0%, var(--candlelight) 50%, var(--warm-cream) 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(28, 24, 20, 0.15);
+        }
+
+        .author-item:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-card), 0 0 25px rgba(180, 134, 11, 0.3);
+            border-color: var(--muted-gold);
+            background: linear-gradient(145deg, var(--candlelight) 0%, var(--warm-cream) 50%, var(--candlelight) 100%);
+        }
+
+        .author-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--muted-gold), var(--soft-amber), var(--muted-gold));
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .author-item:hover::before {
+            opacity: 1;
+        }
+
+        .author-item::after {
+            content: '👤';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            transition: var(--transition-smooth);
+            filter: sepia(1) hue-rotate(20deg) saturate(1.2);
+        }
+
+        .author-item:hover::after {
+            opacity: 0.5;
+            transform: scale(1.1);
+        }
+
+        .author-link {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--dark-mahogany) !important;
+            text-decoration: none !important;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            display: block;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .author-link:hover {
+            color: var(--rich-burgundy) !important;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        /* Pulsante di ritorno */
+        .back-button-container {
+            text-align: center;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+            animation-delay: 0.8s;
+            animation-fill-mode: both;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-button {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--warm-cream) !important;
+            text-decoration: none !important;
+            background: linear-gradient(135deg, var(--aged-leather), var(--deep-brown));
+            padding: 1.2rem 3.5rem;
+            border-radius: 30px;
+            border: 3px solid var(--muted-gold);
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover::before {
+            left: 100%;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, var(--muted-gold), var(--soft-amber));
+            color: var(--dark-mahogany) !important;
+            transform: translateY(-4px) scale(1.05);
+            border-color: var(--aged-leather);
+            box-shadow: var(--shadow-deep);
+        }
+
+        .back-button-icon {
+            font-size: 1.2rem;
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover .back-button-icon {
+            transform: translateX(-5px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+            
+            .container {
+                margin: 1.5rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .book-detail-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .book-title {
+                font-size: 2.5rem;
+            }
+            
+            .book-cover {
+                width: 280px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .book-title {
+                font-size: 2rem;
+            }
+            
+            .book-cover {
+                width: 220px;
+            }
+            
+            .meta-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .back-button {
+                padding: 1rem 2.5rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-left">
+                <a href="/" class="logo">Biblioteca Classica</a>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/libro" class="active">I Nostri Libri</a></li>
+                    <li><a href="/autore">I Nostri Autori</a></li>
+                    <li><a href="/contatti">Contatti</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenuto principale -->
+    <main class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/">Home</a> / <a href="/libro">I Nostri Libri</a> / <span th:text="${libro.titolo}">Dettaglio Libro</span>
+        </div>
+
+        <!-- Layout principale -->
+        <div class="book-detail-layout">
+            <!-- Sezione copertina -->
+            <div class="book-cover-section">
+                <div class="book-cover-container">
+                    <div class="cover-frame"></div>
+                    <img th:src="${libro.url_image}" 
+                         th:alt="'Copertina di ' + ${libro.titolo}"
+                         alt="Copertina libro" 
+                         class="book-cover" />
+                </div>
+            </div>
+
+            <!-- Sezione informazioni -->
+            <div class="book-info-section">
+                <h1 class="book-title" th:text="${libro.titolo}">Titolo libro</h1>
+                
+                <div class="book-meta">
+                    <div class="meta-item">
+                        <span class="meta-label year">Anno:</span>
+                        <span class="meta-value" th:text="${libro.anno}">2000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione autori -->
+        <div class="authors-section">
+            <h3 class="section-title">Autori</h3>
+            <ul class="authors-list">
+                <li class="author-item" th:each="autore : ${libro.autori}">
+                    <a class="author-link" 
+                       th:href="@{'/autore/' + ${autore.id}}"
+                       th:text="${autore.nome} + ' ' + ${autore.cognome}">Nome Autore</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Pulsante di ritorno -->
+        <div class="back-button-container">
+            <a href="/libro" class="back-button">
+                <span class="back-button-icon">⬅️</span>
+                Torna alla lista libri
+            </a>
+        </div>
+    </main>
+</body>
+</html>

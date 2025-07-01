@@ -1,19 +1,66 @@
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Authors</title>
-  </head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutti gli Autori - Libreria Online</title>
+	<link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Libri</a></li>
+                <li><a href="/authors" class="active">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <body>
-	
-    <h1>Authors</h1>
-    <ul>
-      <li th:each="author : ${authors}">
-        <a th:href="@{'/author' + '/' + ${author.id}}"
-           th:text="${author.name} + ' ' + ${author.surname}">Author name and surname</a>
-      </li>
-    </ul>
-  </body>
+    <!-- Contenuto principale -->
+    <main class="container">
+        <h1>I Nostri Autori</h1>
+        <p class="subtitle">Le voci dietro i grandi capolavori</p>
 
+        <div class="elegant-collection">
+            <a th:each="author, stat : ${authors}"
+               th:href="@{'/author/' + ${author.id}}"
+               class="collection-item"
+               data-icon="🖋️"
+               data-category="author">
+
+                <div class="item-number" th:text="${stat.count}">01</div>
+
+                <div class="item-content">
+                    <!-- Nome completo -->
+                    <h3 class="item-title" th:text="${author.name + ' ' + author.surname}">
+                        Nome Cognome
+                    </h3>
+
+                    <!-- Nazionalità se presente -->
+                    <p class="item-author"
+                       th:if="${author.nationality != null}"
+                       th:text="${'Nazionalità: ' + author.nationality}">
+                        Nazionalità
+                    </p>
+
+                    <!-- Anno di nascita -->
+                    <p class="item-description"
+                       th:text="${'Nato nel: ' + author.bornDate}">
+                        Nato nel: 1800
+                    </p>
+
+                    <!-- Anno di morte se presente -->
+                    <p class="item-description"
+                       th:if="${author.deathDate != null}"
+                       th:text="${'Morto nel: ' + author.deathDate}">
+                        Morto nel: 1850
+                    </p>
+                </div>
+            </a>
+        </div>
+    </main>
+</body>
 </html>
