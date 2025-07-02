@@ -1,5 +1,6 @@
 package merialdoProject.authentication;
 
+
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import static merialdoProject.model.Credentials.ADMIN_ROLE;
 
+
 @Configuration
 public class AuthConfiguration {
 
@@ -30,7 +32,7 @@ public class AuthConfiguration {
         http
             .authorizeHttpRequests(auth -> auth
                 // Permetti accesso alle risorse statiche senza login
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico", "/stile.css").permitAll()
                 // Permetti GET alle pagine pubbliche
                 .requestMatchers(HttpMethod.GET, "/", "/index", "/books", "/authors", "/author/*", "/book/*", "/login", "/register").permitAll()
                 // Permetti POST per login e registrazione
@@ -54,8 +56,7 @@ public class AuthConfiguration {
                 .permitAll()
             )
             .exceptionHandling(ex -> ex.accessDeniedPage("/login"))
-            .csrf(csrf -> csrf.disable()); // Abilita CSRF se necessario
-
+            .csrf(csrf -> csrf.disable());
         return http.build();
     }
 

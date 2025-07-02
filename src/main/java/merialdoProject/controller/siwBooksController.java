@@ -18,6 +18,7 @@ import merialdoProject.model.Book;
 import merialdoProject.service.AuthorService;
 import merialdoProject.service.BookService;
 import merialdoProject.service.CredentialsService;
+import merialdoProject.service.ReviewService;
 import merialdoProject.utils.CountryUtils;
 
 @Controller
@@ -45,7 +46,7 @@ public class siwBooksController {
 	public String showAllBooks(Model model) {
 		List<Book> books = (List<Book>) this.bookService.getAllBooks();
 		model.addAttribute("books",books);
-		return "books.html";
+		return "books";
 }
 	
 	
@@ -74,6 +75,7 @@ public class siwBooksController {
 	public String getBook(@PathVariable("id") Long id, Model model, Principal principal) {
 	    Book book = bookService.getBookById(id);
 	    model.addAttribute("book", book);
+	    model.addAttribute("reviews", ReviewService.getRewiewsByBook(id));
 	    return "book.html"; // o il nome corretto del tuo template
 	}
 
@@ -103,6 +105,7 @@ public class siwBooksController {
 
 	    return "redirect:/books";
 	}
+	
 
 	
 

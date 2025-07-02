@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${book != null ? book.title + ' - Dettagli' : 'Libro non trovato'}">Dettagli Libro</title>
-	<link rel="stylesheet" th:href="@{/stile.css}" />
+    <link rel="stylesheet" th:href="@{/stile.css}" />
 </head>
 <body>
     <!-- Header -->
@@ -25,11 +25,9 @@
             <div class="book-details">
                 <!-- Immagine del libro -->
                 <div class="book-image">
-					<img th:if="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
-					     th:src="@{/${book.urlImages[0]}}" 
-					     th:alt="${book.title}"
-					     width="300" />
-
+                    <img th:if="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
+                         th:src="@{/${book.urlImages[0]}}" 
+                         th:alt="${book.title}" width="300" />
                     <div th:unless="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
                          style="width: 300px; height: 400px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #666;">
                         📚<br>Copertina non disponibile
@@ -39,7 +37,6 @@
                 <!-- Informazioni del libro -->
                 <div class="book-info">
                     <h1 th:text="${book.title}">Titolo del Libro</h1>
-                    
                     <div class="book-meta">
                         <p><strong>Anno di pubblicazione:</strong> 
                            <span th:text="${book.publicationYear}">Anno</span></p>
@@ -57,8 +54,51 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- Sezione recensioni -->
+            <div class="review-section">
+                <h2>Recensioni degli utenti</h2>
+
+                <div th:if="${#lists.isEmpty(reviews)}">
+                    <p>Nessuna recensione disponibile per questo libro.</p>
+                </div>
+
+                <ul th:if="${!#lists.isEmpty(reviews)}">
+                    <li th:each="review : ${reviews}">
+                        <p>
+                            <strong th:text="${review.user.name}">Nome Utente</strong> -
+                            <span th:text="${#dates.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">Data</span><br>
+                            <span th:text="'Voto: ' + ${review.evaluation} + '/5'">Voto</span><br>
+                            <em th:text="${review.text}">Testo recensione</em>
+                        </p>
+                        <hr/>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Form per aggiungere una recensione (solo se loggato) -->
+            <div class="review-form" sec:authorize="isAuthenticated()">
+                <h2>Scrivi una recensione</h2>
+                <form th:action="@{/addReview}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id}" />
+
+                    <label for="text">Testo:</label><br>
+                    <textarea name="text" rows="4" cols="50" required></textarea><br>
+
+                    <label for="evaluation">Valutazione (1-5):</label><br>
+                    <input type="number" name="evaluation" min="1" max="5" required><br><br>
+
+                    <button type="submit">Invia Recensione</button>
+                </form>
+            </div>
+
+            <!-- Messaggio se non loggato -->
+            <div sec:authorize="!isAuthenticated()">
+                <p><em>Effettua il <a href="/login">login</a> per scrivere una recensione.</em></p>
+            </div>
         </div>
 
+        <!-- Libro non trovato -->
         <div th:unless="${book}" class="error-message">
             <p>Libro non trovato</p>
             <a href="/books" style="color: var(--primary-color); text-decoration: none;">
