@@ -20,11 +20,7 @@ public class BookService {
 		
 		
 		
-		
-		
-		
-		
-		
+	
 		
 		public Book getBookById(Long id) {
 			return bookRepository.findById(id).get();
@@ -50,6 +46,16 @@ public class BookService {
 
 		    return new ArrayList<>(results);
 		}
+		
+	
+		public void deleteById(Long id) {
+			  bookRepository.deleteById(id);
+			 }
+
+
+		public boolean existsByTitleAndPublicationYear(String title, Integer year) {
+			  return bookRepository.existsByTitleAndPublicationYear(title, year);
+			 }
 
 
 	

@@ -1,0 +1,9 @@
+NotBlank=Campo obbligatorio
+NotNull=Campo obbligatorio
+book.duplicate=Questo libro esiste gia'
+Min.year=Deve essere un numero maggiore di 1600
+Max.year=Deve essere un numero minore di 2025
+NotBlank.book.title=Il titolo e' obbligatorio
+NotNull.book.year=Campo obbligatorio
+typeMismatch.java.lang.Integer=Deve essere un numero
+typeMismatch=Formato non valido
