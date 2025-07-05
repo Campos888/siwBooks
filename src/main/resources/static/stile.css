@@ -209,7 +209,7 @@
 	.nav-links a:hover.nav-books::before { content: '📚'; }
 	.nav-links a:hover.nav-authors::before { content: '🖋️'; }
 
-	/* ===== BARRA DI RICERCA MIGLIORATA ===== */
+	/* ===== BARRA DI RICERCA  ===== */
 	.search-bar-fullwidth {
 	    width: 100%;
 	    max-width: 800px;

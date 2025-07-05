@@ -21,13 +21,10 @@ public class ReviewService {
 	
 	@Autowired
 	private BookService bookService;
-	
-		
-	
+
 	
 	
-	
-	public List<Review> getCommentsByBook(Long bookId) {
+	public List<Review> getReviewByBook(Long bookId) {
         Book book = bookService.getBookById(bookId);
         List<Review> allReviews = (List<Review>) reviewRepository.findAll();
         return allReviews.stream()
@@ -35,29 +32,22 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 	
-	
-	
-	
-	
-	
+
     // You can still have this for saving comments
     public void addReview(String text, Integer evaluation, Book book,User user) {
         Review review = new Review(text,evaluation, user, book);
         reviewRepository.save(review);
     }
-   
-
-
-	
     
+ // Recupera una review tramite id
+    public Review getReviewById(Long reviewId) {
+        Optional<Review> reviewOpt = reviewRepository.findById(reviewId);
+        return reviewOpt.orElse(null);
+    }
     
-	
-	
-	
-	 
-	
-	
-		
-	
+    // Cancella la review con id specificato
+    public void deleteReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
 	
 }

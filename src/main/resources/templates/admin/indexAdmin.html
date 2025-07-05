@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - Libreria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Libreria Admin</a>
+            <ul class="nav-links">
+                <li><a href="/admin">Dashboard</a></li>
+                <li><a href="/admin/books">Gestione Libri</a></li>
+                <li><a href="/admin/authors">Gestione Autori</a></li>
+                <li><a href="/admin/users">Gestione Utenti</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Benvenuto nella sezione Admin</h1>
+        <p>Da qui puoi gestire i contenuti del sito.</p>
+
+        <div class="home-links">
+            <a href="/admin/books" class="home-card">
+                <h3>Gestisci Libri</h3>
+                <p>Aggiungi, modifica o elimina libri dal catalogo.</p>
+            </a>
+            <a href="/admin/authors" class="home-card">
+                <h3>Gestisci Autori</h3>
+                <p>Modifica il database degli autori.</p>
+            </a>
+            <a href="/admin/users" class="home-card">
+                <h3>Gestisci Utenti</h3>
+                <p>Visualizza e modifica i ruoli degli utenti.</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- Logout per admin -->
+    <div sec:authorize="isAuthenticated()">
+        <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>

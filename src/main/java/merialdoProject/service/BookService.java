@@ -1,5 +1,10 @@
 package merialdoProject.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +38,21 @@ public class BookService {
 		public Book save(Book book) {
 	        return bookRepository.save(book); 
 	    }
+		public List<Book> searchBooksByTitleOrAuthorStartingWith(String query) {
+			
+		    List<Book> booksByTitle = bookRepository.findByTitleStartingWithIgnoreCase(query);
+		    List<Book> booksByAuthor = bookRepository.findByAuthorsNameStartingWithIgnoreCaseOrAuthorsSurnameStartingWithIgnoreCase(query, query);
+
+		 
+		    Set<Book> results = new HashSet<>();
+		    results.addAll(booksByTitle);
+		    results.addAll(booksByAuthor);
+
+		    return new ArrayList<>(results);
+		}
+
+
+	
 
 	
 }

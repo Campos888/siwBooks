@@ -2,7 +2,9 @@ package merialdoProject.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import merialdoProject.model.Author;
 import merialdoProject.model.Book;
+import merialdoProject.model.Review;
+import merialdoProject.repository.BookRepository;
 import merialdoProject.service.AuthorService;
 import merialdoProject.service.BookService;
 import merialdoProject.service.CredentialsService;
@@ -33,11 +38,16 @@ public class siwBooksController {
 	@Autowired
 	CredentialsService credentialsService;
 	
+	@Autowired
+	ReviewService reviewService;
+
+	
 	
 	
 	
 	@GetMapping("/")
     public String index(Model model) {
+
         return "indexSiwBooks.html"; // must match one of your templates (e.g., movies.html)
     }
 	
@@ -73,9 +83,9 @@ public class siwBooksController {
 	
 	@GetMapping("/book/{id}")
 	public String getBook(@PathVariable("id") Long id, Model model, Principal principal) {
-	    Book book = bookService.getBookById(id);
+	    Book book = bookService.getBookById(id); 
 	    model.addAttribute("book", book);
-	    model.addAttribute("reviews", ReviewService.getRewiewsByBook(id));
+
 	    return "book.html"; // o il nome corretto del tuo template
 	}
 
@@ -106,9 +116,31 @@ public class siwBooksController {
 	    return "redirect:/books";
 	}
 	
+	@GetMapping("/search")
+	public String searchBooks(@RequestParam("query") String query, Model model) {
+	    List<Book> results = bookService.searchBooksByTitleOrAuthorStartingWith(query);
+	    model.addAttribute("books", results);
+	    model.addAttribute("query", query);
+	    return "books.html";
+	}
 
-	
+    
+	@GetMapping("/api/search")
+	@ResponseBody
+	public Map<String, Object> search(@RequestParam("query") String query) {
+	    List<Book> books = bookService.searchBooksByTitleOrAuthorStartingWith(query);
+	    List<Author> authors = authorService.findByNameStartingWithOrSurnameStartingWith(query, query);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("books", books);
+	    result.put("authors", authors);
+	    return result;
+	}
+
+
+
 
 	
 	
 }
+

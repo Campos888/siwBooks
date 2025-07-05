@@ -45,6 +45,19 @@ public class ReviewController {
 	    // Redirect back to the country's detail page
 	    return "redirect:/book/" + bookId;
 	}
+	
+	@PostMapping("/deleteReview")
+    public String deleteReview(@RequestParam("reviewId") Long reviewId, Principal principal) {
+        User user = credentialsService.findByUsername(principal.getName());
+        var review = commentService.getReviewById(reviewId);
+
+        if (review != null && review.getUser().getId().equals(user.getId())) {
+            commentService.deleteReview(reviewId);
+            return "redirect:/book/" + review.getBook().getId();
+        }
+        // Se non è autorizzato o la review non esiste, redirect alla home o alla pagina libro se possibile
+        return "redirect:/";
+    }
 
 	
 	

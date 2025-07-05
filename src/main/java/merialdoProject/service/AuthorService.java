@@ -1,5 +1,7 @@
 package merialdoProject.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,10 @@ public class AuthorService {
 		public Author save(Author author) {
 	        return authorRepository.save(author); 
 	    }
+		 public List<Author> findByNameStartingWithOrSurnameStartingWith(String name, String surname) {
+		        return authorRepository.findByNameStartingWithIgnoreCaseOrSurnameStartingWithIgnoreCase(name, surname);
+		    }
+
 
 	
 }

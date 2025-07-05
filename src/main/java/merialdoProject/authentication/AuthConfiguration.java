@@ -1,12 +1,12 @@
 package merialdoProject.authentication;
 
-
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,8 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import static merialdoProject.model.Credentials.ADMIN_ROLE;
 
-
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
+
+
 public class AuthConfiguration {
 
     private final DataSource dataSource;
@@ -26,19 +28,21 @@ public class AuthConfiguration {
     public AuthConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+    
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Permetti accesso alle risorse statiche senza login
+                // Accesso libero alle risorse statiche
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico", "/stile.css").permitAll()
-                // Permetti GET alle pagine pubbliche
-                .requestMatchers(HttpMethod.GET, "/", "/index", "/books", "/authors", "/author/*", "/book/*", "/login", "/register").permitAll()
-                // Permetti POST per login e registrazione
+                // Accesso pubblico alle pagine principali
+                .requestMatchers(HttpMethod.GET, "/", "/index", "/books", "/authors", "/api/search", "/search", "/author/*", "/book/*", "/login", "/register").permitAll()
+                // Accesso pubblico alle richieste POST di login e registrazione
                 .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
-                // Admin solo con ruolo ADMIN_ROLE
+                // Accesso alle pagine admin solo con ruolo ADMIN
                 .requestMatchers("/admin/**").hasAuthority(ADMIN_ROLE)
+
                 // Tutte le altre richieste richiedono autenticazione
                 .anyRequest().authenticated()
             )
@@ -57,6 +61,7 @@ public class AuthConfiguration {
             )
             .exceptionHandling(ex -> ex.accessDeniedPage("/login"))
             .csrf(csrf -> csrf.disable());
+
         return http.build();
     }
 
