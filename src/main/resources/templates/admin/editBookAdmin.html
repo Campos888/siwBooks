@@ -12,6 +12,8 @@
 
         <form class="admin-form form-card" th:action="@{/admin/book/update}" th:object="${book}" method="post">
 
+			<input type="hidden" th:field="*{id}" />
+			
             <label for="title">Titolo:</label>
             <input type="text" id="title" th:field="*{title}" class="input-field" required/>
 

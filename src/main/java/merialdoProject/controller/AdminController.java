@@ -97,8 +97,15 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admin/editBookAdmin";
         }
-        bookService.save(book); // Se esiste aggiorna, se no crea
-        return "redirect:/admin/books";
+        else {
+        	Book bookToUpdate = bookService.getBookById(book.getId());
+        	bookToUpdate.setTitle(book.getTitle());
+        	bookToUpdate.setPublicationYear(book.getPublicationYear());
+
+            bookService.save(bookToUpdate);
+
+            return "redirect:/admin/books";
+        }
     }
 
 
