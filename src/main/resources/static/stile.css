@@ -591,22 +591,178 @@
 	    }
 	}
 
-	/* ===== STILI SPECIFICI PER DEMO ===== */
-	.demo-section {
-	    margin: 3rem 0;
+	/* ===== STILI SEZIONE ADMIN AGGIORNATI ===== */
+
+	.admin-container {
+	    max-width: 900px;
+	    margin: 3rem auto;
+	    background: var(--parchment-beige);
 	    padding: 2rem;
-	    background: rgba(255, 255, 255, 0.1);
-	    border-radius: 15px;
-	    border: 1px dashed var(--muted-gold);
+	    border-radius: 12px;
+	    box-shadow: var(--shadow-card);
+	    border: 1px solid var(--muted-gold);
 	}
 
-	.demo-title {
+	.admin-container h1 {
 	    font-family: 'Cinzel', serif;
 	    color: var(--muted-gold);
-	    font-size: 1.5rem;
-	    margin-bottom: 1.5rem;
 	    text-align: center;
+	    margin-bottom: 2rem;
 	}
+
+	.admin-table {
+	    width: 100%;
+	    border-collapse: collapse;
+	    background: var(--warm-cream);
+	    border-radius: 10px;
+	    overflow: hidden;
+	    box-shadow: var(--shadow-elegant);
+	    margin-bottom: 2rem;
+	}
+
+	.admin-table th, .admin-table td {
+	    padding: 1rem;
+	    text-align: left;
+	    border-bottom: 1px solid #ddd;
+	    font-size: 1rem;
+	    color: var(--text-dark);
+	}
+
+	.admin-table th {
+	    background: var(--muted-gold);
+	    color: white;
+	    font-weight: bold;
+	}
+
+	/* ===== FORM ===== */
+	.admin-form label {
+	    display: block;
+	    margin-top: 1rem;
+	    font-weight: bold;
+	    color: var(--text-medium);
+	}
+
+	.admin-form input {
+	    width: 100%;
+	    padding: 0.8rem;
+	    margin-top: 0.3rem;
+	    border-radius: 8px;
+	    border: 1px solid var(--aged-leather);
+	    font-family: 'Crimson Text', serif;
+	    font-size: 1rem;
+	}
+
+	.input-field {
+	    padding: 0.8rem 1rem;
+	    font-size: 1rem;
+	    border: 2px solid var(--aged-leather);
+	    border-radius: 10px;
+	    background-color: #fffdf4;
+	    transition: all 0.3s ease;
+	}
+
+	.input-field:focus {
+	    border-color: var(--muted-gold);
+	    outline: none;
+	    box-shadow: 0 0 8px rgba(180, 134, 11, 0.3);
+	}
+
+	.form-card {
+	    display: flex;
+	    flex-direction: column;
+	    gap: 1rem;
+	    background: var(--warm-cream);
+	    padding: 2rem;
+	    border-radius: 15px;
+	    box-shadow: var(--shadow-card);
+	    border: 2px solid var(--muted-gold);
+	}
+
+	/* ===== STILI BOTTONI SEZIONE ADMIN UNIFICATI ===== */
+
+	.form-buttons {
+	    display: flex;
+	    justify-content: flex-start;
+	    gap: 1.2rem;
+	    margin-top: 2rem;
+	    flex-wrap: wrap;
+	}
+
+	/* Bottoni generici admin */
+	.admin-button-outline,
+	.admin-button-danger-outline,
+	.auth-button {
+	    padding: 0.8rem 1.5rem;
+	    font-size: 1rem;
+	    border: 2px solid;
+	    border-radius: 14px;
+	    cursor: pointer;
+	    font-weight: bold;
+	    font-family: 'Cinzel', serif;
+	    background: var(--warm-cream);
+	    transition: all 0.3s ease;
+	    display: inline-flex;
+	    align-items: center;
+	    gap: 0.6rem;
+	    text-decoration: none;
+	    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+	    color: var(--text-dark);
+	}
+
+	/* Modifica */
+	.admin-button-outline {
+	    border-color: var(--muted-gold);
+	}
+	.admin-button-outline:hover,
+	.admin-button-outline:focus {
+	    background-color: var(--muted-gold);
+	    color: white;
+	}
+
+	/* Elimina */
+	.admin-button-danger-outline {
+	    border-color: var(--rich-burgundy);
+	}
+	.admin-button-danger-outline:hover,
+	.admin-button-danger-outline:focus {
+	    background-color: var(--rich-burgundy);
+	    color: white;
+	}
+
+	/* Salva e Torna */
+	.auth-button {
+	    border-color: var(--aged-leather);
+	}
+	.auth-button:hover,
+	.auth-button:focus {
+	    background-color: var(--soft-amber);
+	    color: white;
+	}
+
+	/* Icone a destra */
+	.admin-button-outline::after {
+	    content: '🖉';
+	    font-size: 1.1rem;
+	}
+	.admin-button-danger-outline::after {
+	    content: '🗑️';
+	    font-size: 1.1rem;
+	}
+	.auth-button.save::after {
+	    content: '🔐';
+	    font-size: 1.1rem;
+	}
+	.auth-button.back::after {
+	    content: '📚';
+	    font-size: 1.1rem;
+	}
+	.auth-button.add::after {
+	    content: '➕';
+	    font-size: 1.1rem;
+	}
+
+
+	
     </style>
 </head>
 <body>

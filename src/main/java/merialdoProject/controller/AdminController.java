@@ -56,7 +56,8 @@ public class AdminController {
          else {                         // NON sono emersi errori nel binding
             this.bookService.save(book);
             model.addAttribute("book", book);
-            return "redirect:/admin/booksAdmin";
+            return "redirect:/admin/books";
+
 
         }
     }
@@ -67,6 +68,28 @@ public class AdminController {
     	   model.addAttribute("books", this.bookService.getAllBooks());
     	   return "admin/booksAdmin";
      }
+    
+    @GetMapping("/book/edit/{id}")
+    public String editBookForm(@PathVariable("id") Long id, Model model) {
+        Book book = bookService.getBookById(id); // o getBook(id)
+        if (book == null) {
+            return "redirect:/admin/books"; // se non trovato, ritorna alla lista
+        }
+        model.addAttribute("book", book);
+        return "admin/editBookAdmin";
+    }
+    
+    @PostMapping("/book/update")
+    public String updateBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, Model model) {
+        bookValidator.validate(book, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "admin/editBookAdmin";
+        }
+        bookService.save(book); // Se esiste aggiorna, se no crea
+        return "redirect:/admin/books";
+    }
+
+
     
     
     

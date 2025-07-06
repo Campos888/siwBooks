@@ -6,31 +6,32 @@
     <link rel="stylesheet" th:href="@{/stile.css}" />
 </head>
 <body>
-    <h1>Gestione Libri</h1>
-    <a href="/admin/books/create">Aggiungi Nuovo Libro</a>
+<main class="admin-container">
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Titolo</th>
-               
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="book : ${books}">
-                <td th:text="${book.id}"></td>
-                <td th:text="${book.title}"></td>
-               
-              
-                <td>
-                    <a th:href="@{'/admin/books/edit/' + ${book.id}}">Modifica</a> |
-                    <form th:action="@{'/admin/deleteBooks/' + ${book.id}}" method="post" style="display:inline">
-                        <button type="submit">Elimina</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Pulsante per tornare alla home admin -->
+    <a th:href="@{/admin/indexAdmin}" class="admin-home-button">🏛️ Torna alla Home</a>
+
+    <h1>Gestione dei Libri</h1>
+
+    <!-- Pulsante per aggiungere un nuovo libro -->
+    <a th:href="@{/admin/books/create}" class="auth-button add">Aggiungi Nuovo Libro</a>
+
+    <div class="books-grid">
+        <div class="book-card" th:each="book : ${books}">
+            <h2 class="book-title" th:text="${book.title}">Titolo Libro</h2>
+            <p class="book-details">Anno: <span th:text="${book.publicationYear}">2000</span></p>
+
+            <div class="form-buttons">
+                <!-- Pulsante Modifica -->
+                <a th:href="@{'/admin/book/edit/' + ${book.id}}" class="admin-button-outline">Modifica</a>
+
+                <!-- Pulsante Elimina -->
+                <form th:action="@{'/admin/deleteBooks/' + ${book.id}}" method="post" style="display:inline">
+                    <button type="submit" class="admin-button-danger-outline">Elimina</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
