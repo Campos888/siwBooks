@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Autore</title>
+    <link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+<main class="admin-container">
+    <a th:href="@{/admin/authors}" class="admin-home-button">← Torna alla Gestione Autori</a>
+    <h1>Modifica autore</h1>
+
+    <form th:action="@{/admin/author/edit}" method="post" th:object="${author}" class="admin-form form-card">
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Nome:</label>
+        <input type="text" th:field="*{name}" class="input-field" required />
+
+        <label>Cognome:</label>
+        <input type="text" th:field="*{surname}" class="input-field" required />
+
+        <label>Data di nascita:</label>
+        <input type="date" th:field="*{bornDate}" class="input-field" required />
+
+        <label>Data di morte (se presente):</label>
+        <input type="date" th:field="*{deathDate}" class="input-field" />
+
+        <label>Nazionalità:</label>
+        <input type="text" th:field="*{nationality}" class="input-field" />
+
+        <div class="form-buttons">
+            <button type="submit" class="auth-button save">Salva modifiche</button>
+            <a th:href="@{/admin/authors}" class="auth-button back">Annulla</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

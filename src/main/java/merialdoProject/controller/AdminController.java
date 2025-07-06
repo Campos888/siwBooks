@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import merialdoProject.model.Author;
 import merialdoProject.model.Book;
+import merialdoProject.service.AuthorService;
 import merialdoProject.service.BookService;
+import merialdoProject.validator.AuthorValidator;
 import merialdoProject.validator.BookValidator;
 
 @Controller
@@ -29,6 +32,15 @@ public class AdminController {
     
     @Autowired
     BookValidator bookValidator;
+    
+    @Autowired
+    AuthorService authorService; 
+    
+    @Autowired
+    AuthorValidator authorValidator; 
+    
+   
+    
     
     @GetMapping
     public String adminHome() {
@@ -90,8 +102,61 @@ public class AdminController {
     }
 
 
+    @GetMapping ("/authors")
+    public String adminAuthors(Model model) {
+    	model.addAttribute("authors", authorService.getAllAuthors());
+    	return "admin/authorsAdmin";
+    }
+    
+
+
+    @GetMapping("/authors/create")
+    public String formAddAuthors(Model model) {
+        model.addAttribute("author", new Author());
+        return "admin/formAddAuthorAdmin";
+    }
     
     
+    @PostMapping("/author/create")
+    public String newAuthor(@Valid @ModelAttribute("author") Author author, BindingResult bindingResult, Model model) {
+     this.authorValidator.validate(author, bindingResult); 
+     if (bindingResult.hasErrors()) { // sono emersi errori nel binding
+             return "admin/formAddAuthorAdmin.html";
+          }
+         else {                         // NON sono emersi errori nel binding
+            this.authorService.save(author);
+            model.addAttribute("author", author);
+            return "redirect:/admin/author";
+
+
+        }
+    }
+    @PostMapping("/deleteAuthor/{id}")
+    public String deleteAuthors (@PathVariable("id") Long id, Model model) {
+    	   this.authorService.deleteById(id);
+    	   model.addAttribute("authors", this.authorService.getAllAuthors());
+    	   return "admin/authorsAdmin";
+     }
     
+    @GetMapping("/author/edit/{id}")
+    public String editAuthorForm(@PathVariable("id") Long id, Model model) {
+        Author author = authorService.getAuthorById(id); // o getBook(id)
+        if (author == null) {
+            return "redirect:/admin/authors"; // se non trovato, ritorna alla lista
+        }
+        model.addAttribute("author", author);
+        return "admin/editAuthorAdmin";
+    }
+    
+    @PostMapping("/author/update")
+    public String updateAuthor(@Valid @ModelAttribute("author") Author author, BindingResult bindingResult, Model model) {
+        authorValidator.validate(author, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "admin/editAuthorAdmin";
+        }
+        authorService.save(author); // Se esiste aggiorna, se no crea
+        return "redirect:/admin/author";
+    }
+
 
 }

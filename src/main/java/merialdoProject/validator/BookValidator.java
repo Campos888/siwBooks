@@ -1,6 +1,7 @@
 package merialdoProject.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -19,7 +20,7 @@ public class BookValidator implements Validator {
     Book book = (Book)o;
     if (book.getTitle()!=null && book.getPublicationYear()!=null
   && bookService.existsByTitleAndPublicationYear(book.getTitle(), book.getPublicationYear())) {
-      errors.reject("movie.duplicate");
+      errors.reject("book.duplicate");
     }
   }
   

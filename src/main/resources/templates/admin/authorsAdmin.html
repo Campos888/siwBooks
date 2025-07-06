@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione Autori</title>
+    <link rel="stylesheet" th:href="@{/stile.css}" />
+</head>
+<body>
+<main class="admin-container">
+	<a th:href="@{/admin}" class="admin-home-button">🏛️ Torna alla Home</a>
+
+    <h1>Gestione degli Autori</h1>
+
+    <a th:href="@{/admin/authors/create}" class="admin-button-outline add">Aggiungi Nuovo Autore</a>
+
+    <div class="books-grid">
+        <div class="book-card" th:each="author : ${authors}">
+            <h2 class="book-title" th:text="${author.name + ' ' + author.surname}">Nome Autore</h2>
+            <p class="book-details">Nato il: <span th:text="${author.bornDate}">1900-01-01</span></p>
+            <p class="book-details" th:if="${author.deathDate != null}">Morto il: <span th:text="${author.deathDate}">2000-01-01</span></p>
+            <p class="book-details" th:if="${author.nationality != null}">Nazionalità: <span th:text="${author.nationality}">Italiana</span></p>
+
+            <div class="form-buttons">
+                <a th:href="@{'/admin/author/edit/' + ${author.id}}" class="admin-button-outline">Modifica</a>
+                <form th:action="@{'/admin/deleteAuthor/' + ${author.id}}" method="post" style="display:inline">
+                    <button type="submit" class="admin-button-danger-outline">Elimina</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -24,21 +24,12 @@
         <h1>I Nostri Libri</h1>
         
       
-		<div class="elegant-collection">
-		    <a th:each="book, bookStat : ${books}"
+
+		<div class="books-grid">
+		    <a th:each="book : ${books}" 
 		       th:href="@{'/book/' + ${book.id}}"
-		       class="collection-item"
-		       data-icon="📖"
-		       data-category="classics">
-		        <div class="item-number" th:text="${bookStat.count}">01</div>
-		        <div class="item-content">
-		            <h3 class="item-title" th:text="${book.title}">Titolo del Libro</h3>
-		            <p class="item-author"
-		               th:each="author : ${book.authors}"
-		               th:text="${author.name + ' ' + author.surname}">Autore</p>
-		        
-		            <span class="item-year" th:text="${book.publicationYear}">Anno</span>
-		        </div>
+		       class="book-card">
+		        <h3 class="book-title" th:text="${book.title}">Titolo del Libro</h3>
 		    </a>
 		</div>
 

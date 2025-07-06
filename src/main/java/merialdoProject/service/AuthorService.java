@@ -30,6 +30,16 @@ public class AuthorService {
 		        return authorRepository.findByNameStartingWithIgnoreCaseOrSurnameStartingWithIgnoreCase(name, surname);
 		    }
 
+		public boolean existsByNameAndSurname(String name, String surname) {
+			return authorRepository.existsByNameAndSurname(name, surname); 
+		}
+
+		public void deleteById(Long id) {
+			 authorRepository.deleteById(id);
+			
+		}
+
+		
 
 	
 }

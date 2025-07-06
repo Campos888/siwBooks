@@ -24,43 +24,15 @@
         <h1>I Nostri Autori</h1>
         <p class="subtitle">Le voci dietro i grandi capolavori</p>
 
-        <div class="elegant-collection">
-            <a th:each="author, stat : ${authors}"
-               th:href="@{'/author/' + ${author.id}}"
-               class="collection-item"
-               data-icon="🖋️"
-               data-category="author">
-
-                <div class="item-number" th:text="${stat.count}">01</div>
-
-                <div class="item-content">
-                    <!-- Nome completo -->
-                    <h3 class="item-title" th:text="${author.name + ' ' + author.surname}">
-                        Nome Cognome
-                    </h3>
-
-                    <!-- Nazionalità se presente -->
-                    <p class="item-author"
-                       th:if="${author.nationality != null}"
-                       th:text="${'Nazionalità: ' + author.nationality}">
-                        Nazionalità
-                    </p>
-
-                    <!-- Anno di nascita -->
-                    <p class="item-description"
-                       th:text="${'Nato nel: ' + author.bornDate}">
-                        Nato nel: 1800
-                    </p>
-
-                    <!-- Anno di morte se presente -->
-                    <p class="item-description"
-                       th:if="${author.deathDate != null}"
-                       th:text="${'Morto nel: ' + author.deathDate}">
-                        Morto nel: 1850
-                    </p>
-                </div>
-            </a>
-        </div>
+		<div class="authors-grid">
+		            <a th:each="author : ${authors}"
+		               th:href="@{'/author/' + ${author.id}}"
+		               class="author-card">
+		                <h3 class="author-name" th:text="${author.name + ' ' + author.surname}">
+		                    Nome Cognome
+		                </h3>
+		            </a>
+		        </div>
     </main>
 </body>
 </html>
