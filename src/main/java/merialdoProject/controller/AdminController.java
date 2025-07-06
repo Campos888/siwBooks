@@ -51,12 +51,13 @@ public class AdminController {
     public String newBook(@Valid @ModelAttribute("book") 	Book book, BindingResult bindingResult, Model model) {
      this.bookValidator.validate(book, bindingResult); 
      if (bindingResult.hasErrors()) { // sono emersi errori nel binding
-             return "formAddBookAdmin.html";
+             return "admin/formAddBookAdmin.html";
           }
          else {                         // NON sono emersi errori nel binding
             this.bookService.save(book);
             model.addAttribute("book", book);
-            return "redirect:book/"+book.getId();
+            return "redirect:/admin/booksAdmin";
+
         }
     }
     

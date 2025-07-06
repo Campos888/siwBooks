@@ -20,7 +20,9 @@ INSERT INTO book (id, publication_year, title, url_images) VALUES(7, 1845, 'The 
 INSERT INTO book (id, publication_year, title, url_images) VALUES(8, 1996, 'A Game of Thrones', '{}');
 INSERT INTO book (id, publication_year, title, url_images) VALUES(9, 1952, 'The Old Man and the Sea', '{}');
 INSERT INTO book (id, publication_year, title, url_images) VALUES(10, 2002, 'Kafka on the Shore', '{}');
-
+-- i set id for new countries adding
+SELECT setval('book_seq', (SELECT MAX(id) FROM book));
+--
 
 
 INSERT INTO book_authors (books_id, authors_id) VALUES(1, 1);
