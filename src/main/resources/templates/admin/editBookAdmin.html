@@ -20,11 +20,34 @@
             <label for="publicationYear">Anno di pubblicazione:</label>
             <input type="number" id="publicationYear" th:field="*{publicationYear}" class="input-field" required/>
 
-            <div class="form-buttons">
-				<button type="submit" class="admin-button-outline">Aggiorna</button>
-				<a href="/admin/books" class="admin-button-danger-outline">Annulla</a>
+          
+			
+			
+			<!-- List existing authors -->
+			    <label>Autori esistenti:</label>
+			    <ul>
+			        <li th:each="author : *{authors}">
+			            <span th:text="${author.name}"></span>
+			            <a th:href="@{/admin/book/removeAuthor(bookId=${book.id}, authorId=${author.id})}" class="admin-button-danger-outline">Rimuovi</a>
+			        </li>
+			    </ul>
 
-            </div>
+				<!-- Dropdown to select existing author -->
+				<label for="selectedAuthorId">Aggiungi autore esistente:</label>
+				<select name="selectedAuthorId" id="selectedAuthorId" class="input-field">
+				    <option value="" selected>-- Seleziona un autore --</option>
+				    <option th:each="author : ${availableAuthors}"
+				            th:value="${author.id}"
+				            th:text="${author.name + ' ' + author.surname}">
+				    </option>
+				</select>
+				
+			    <div class="form-buttons">
+			        <button type="submit" class="admin-button-outline">Aggiorna</button>
+			        <a href="/admin/books" class="admin-button-danger-outline">Annulla</a>
+			    </div>
+			
+			
         </form>
     </div>
 

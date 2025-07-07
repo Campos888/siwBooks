@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import merialdoProject.model.Author;
@@ -81,6 +82,11 @@ public class AdminController {
     	   return "admin/booksAdmin";
      }
     
+    
+    
+    
+    
+    
     @GetMapping("/book/edit/{id}")
     public String editBookForm(@PathVariable("id") Long id, Model model) {
         Book book = bookService.getBookById(id); // o getBook(id)
@@ -88,9 +94,17 @@ public class AdminController {
             return "redirect:/admin/books"; // se non trovato, ritorna alla lista
         }
         model.addAttribute("book", book);
+        
+        List<Author> availableAuthors = (List<Author>) authorService.getAllAuthors();
+        model.addAttribute("availableAuthors", availableAuthors);
+        
         return "admin/editBookAdmin";
     }
     
+    
+    
+    
+    /*
     @PostMapping("/book/update")
     public String updateBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, Model model) {
         bookValidator.validate(book, bindingResult);
@@ -108,12 +122,145 @@ public class AdminController {
         }
     }
 
+    
+    */
+    
+//------------------------------------
+    
+    /*
+    @PostMapping("/book/update")
+    public String updateBook(@Valid @ModelAttribute("book") Book book,
+                             BindingResult bindingResult,
+                             @RequestParam(value = "newAuthorNameAndSurname", required = false) String newAuthorName,
+                             Model model) {
 
+        bookValidator.validate(book, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "admin/editBookAdmin";
+        }
+
+        Book existingBook = bookService.getBookById(book.getId());
+        if (existingBook == null) {
+            bindingResult.reject("notfound", "Book not found");
+            return "admin/editBookAdmin";
+        }
+
+        // Update book fields
+        existingBook.setTitle(book.getTitle());
+        existingBook.setPublicationYear(book.getPublicationYear());
+
+
+
+        // Handle new author
+        if (newAuthorNameAndSurname != null && !newAuthorNameAndSurname.trim().isEmpty()) {
+            // Assuming case-insensitive match; adjust as needed
+            Author author = authorService.findByNameAndSurname(newAuthorNameAndSurname.trim());
+    		if (author != null){
+    			if (!existingBook.getAuthors().contains(author)) {
+                	existingBook.getAuthors().add(author);
+                	
+            	}
+    			if (!author.getBooks().contains(existingBook)) {
+                	author.getBooks().add(existingBook);
+                	authorService.save(author);
+            	}
+    		}
+        }
+
+        bookService.save(existingBook);
+        return "redirect:/admin/book/edit/" + existingBook.getId(); // stay on edit page
+    }
+
+    */
+    
+    //------------------------------------
+    
+    /*
+    @PostMapping("/book/update")
+    public String updateBook(@Valid @ModelAttribute("book") Book book,
+                             BindingResult bindingResult,
+                             @RequestParam(value = "authorName", required = false) String authorName,
+                             Model model) {
+
+        bookValidator.validate(book, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "admin/editBookAdmin";
+        }
+
+        // Fetch existing book to avoid overwriting authors
+        Book existingBook = bookService.getBookById(book.getId());
+        if (existingBook == null) {
+            bindingResult.reject("notfound", "Libro non trovato.");
+            return "admin/editBookAdmin";
+        }
+
+        // Update fields
+        existingBook.setTitle(book.getTitle());
+        existingBook.setPublicationYear(book.getPublicationYear());
+
+        // Add new author if provided
+        if (authorName != null && !authorName.trim().isEmpty()) {
+            
+
+                Author author = authorService.findByNameStartingWithOrSurnameStartingWith(authorName, authorName);
+               
+
+                if (!existingBook.getAuthors().contains(author)) {
+                    existingBook.getAuthors().add(author);
+                }
+            } else {
+                // Invalid format
+                bindingResult.rejectValue("title", "invalidAuthorFormat", "Inserisci nome e cognome separati da uno spazio.");
+                return "admin/editBookAdmin";
+            }
+        }
+
+        bookService.save(existingBook);
+        return "redirect:/admin/book/edit/" + existingBook.getId();
+    }
+*/
+    
+    
+    @PostMapping("/book/update")
+    public String updateBook(@Valid @ModelAttribute("book") Book book,
+                             BindingResult bindingResult,
+                             @RequestParam(value = "selectedAuthorId", required = false) Long selectedAuthorId,
+                             Model model) {
+
+
+    	
+        Book existingBook = bookService.getBookById(book.getId());
+  
+        existingBook.setTitle(book.getTitle());
+        existingBook.setPublicationYear(book.getPublicationYear());
+
+        if( selectedAuthorId != null) {
+        	Author author = authorService.getAuthorById(selectedAuthorId);
+        	author.getBooks().add(existingBook);
+        	existingBook.getAuthors().add(author);
+        	authorService.save(author);
+        }
+
+        bookService.save(existingBook);
+        
+        
+        model.addAttribute("book", existingBook);
+        model.addAttribute("availableAuthors", authorService.getAllAuthors());
+        return "redirect:/admin/book/edit/" + existingBook.getId();
+    }
+
+    
+    
     @GetMapping ("/authors")
     public String adminAuthors(Model model) {
     	model.addAttribute("authors", authorService.getAllAuthors());
     	return "admin/authorsAdmin";
     }
+    
+    
+    
+    
+    
     
 
 
@@ -164,6 +311,9 @@ public class AdminController {
         authorService.save(author); // Se esiste aggiorna, se no crea
         return "redirect:/admin/author";
     }
+    
+    
+    
 
 
 }

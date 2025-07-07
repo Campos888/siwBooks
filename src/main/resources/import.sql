@@ -9,6 +9,9 @@ INSERT INTO author (id, born_date, death_date, nationality, name, surname, url_i
 INSERT INTO author (id, born_date, death_date, nationality, name, surname, url_image) VALUES(9, 1899, 1961, 'United States', 'Ernest', 'Hemingway', '');
 INSERT INTO author (id, born_date, death_date, nationality, name, surname, url_image) VALUES(10, 1973, NULL, 'Japan', 'Haruki', 'Murakami', '');
 
+-- i set id for new countries adding
+SELECT setval('author_seq', (SELECT MAX(id) FROM author));
+--
 
 INSERT INTO book (id, publication_year, title, url_images) VALUES(1, 1920, 'The Mysterious Affair at Styles', '{}');
 INSERT INTO book (id, publication_year, title, url_images) VALUES(2, 1997, 'Harry Potter and the Philosopher''s Stone', '{}');
@@ -20,12 +23,16 @@ INSERT INTO book (id, publication_year, title, url_images) VALUES(7, 1845, 'The 
 INSERT INTO book (id, publication_year, title, url_images) VALUES(8, 1996, 'A Game of Thrones', '{}');
 INSERT INTO book (id, publication_year, title, url_images) VALUES(9, 1952, 'The Old Man and the Sea', '{}');
 INSERT INTO book (id, publication_year, title, url_images) VALUES(10, 2002, 'Kafka on the Shore', '{}');
+
 -- i set id for new countries adding
 SELECT setval('book_seq', (SELECT MAX(id) FROM book));
 --
 
 
 INSERT INTO book_authors (books_id, authors_id) VALUES(1, 1);
+
+INSERT INTO book_authors (books_id, authors_id) VALUES(2, 9);
+
 INSERT INTO book_authors (books_id, authors_id) VALUES(2, 2);
 INSERT INTO book_authors (books_id, authors_id) VALUES(3, 3);
 INSERT INTO book_authors (books_id, authors_id) VALUES(4, 4);
@@ -35,6 +42,13 @@ INSERT INTO book_authors (books_id, authors_id) VALUES(7, 7);
 INSERT INTO book_authors (books_id, authors_id) VALUES(8, 8);
 INSERT INTO book_authors (books_id, authors_id) VALUES(9, 9);
 INSERT INTO book_authors (books_id, authors_id) VALUES(10, 10);
+
+
+-- i set id for new countries adding
+SELECT setval('book_authors_seq', (SELECT MAX(id) FROM book_authors));
+--
+
+
 
 --admin password:"a"
 INSERT INTO users (id, name, surname, email) VALUES (nextval('users_seq'), 'admin', 'admin', 'admin@admin.com');
