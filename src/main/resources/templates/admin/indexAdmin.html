@@ -34,18 +34,15 @@
                 <h3>Gestisci Autori</h3>
                 <p>Modifica il database degli autori.</p>
             </a>
-            <a href="/admin/users" class="home-card">
-                <h3>Gestisci Utenti</h3>
-                <p>Visualizza e modifica i ruoli degli utenti.</p>
-            </a>
         </div>
     </main>
 
     <!-- Logout per admin -->
-    <div sec:authorize="isAuthenticated()">
-        <form action="/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
-    </div>
+	<div sec:authorize="isAuthenticated()">
+	    <form action="/logout" method="post" style="display: inline;">
+	        <button type="submit" class="auth-footer-btn">⎋ Logout</button>
+	    </form>
+	</div>
+
 </body>
 </html>

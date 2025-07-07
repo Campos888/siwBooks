@@ -838,6 +838,24 @@
 	    font-size: 0.85rem;
 	    color: var(--aged-leather);
 	}
+	.admin-logout-btn {
+	  background-color: var(--button-bg);
+	  color: var(--text-color);
+	  font-family: 'Cinzel', serif;
+	  font-weight: 600;
+	  border: 2px solid var(--header-bg);
+	  border-radius: 50px;
+	  padding: 0.4rem 1.5rem;
+	  font-size: 1.1rem;
+	  cursor: pointer;
+	  box-shadow: var(--shadow);
+	  transition: background-color 0.3s ease;
+	}
+
+	.admin-logout-btn:hover {
+	  background-color: var(--button-hover);
+	}
+
 
 
 
