@@ -103,12 +103,7 @@
 			</div>
 
 
-            <!-- Messaggio se non loggato -->
-            <div sec:authorize="!isAuthenticated()">
-                <p><em>Effettua il <a href="/login">login</a> per scrivere una recensione.</em></p>
-            </div>
-        </div>
-
+         
         <!-- Libro non trovato -->
         <div th:unless="${book}" class="error-message">
             <p>Libro non trovato</p>
