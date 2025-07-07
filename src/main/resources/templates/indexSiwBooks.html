@@ -65,23 +65,19 @@
 
   
 
-   <!-- logut solo se sei loggato -->
-    <div sec:authorize="isAuthenticated()">
-      <form action="/logout" method="post">
-        <button type="submit">Logout</button>
-      </form>
-    </div>
-    
+	<footer class="auth-footer">
+	    <div sec:authorize="!isAuthenticated()">
+	        <a href="/login" class="auth-footer-btn">🔑 Login</a>
+	        <a href="/register" class="auth-footer-btn">📝 Register</a>
+	    </div>
+	    <div sec:authorize="isAuthenticated()">
+	        <form action="/logout" method="post" style="display: inline;">
+	            <button type="submit" class="auth-footer-btn">🚪 Logout</button>
+	        </form>
+	    </div>
+	</footer>
 
-    <!-- login solo se non sei loggato puoi loggarti-->
-     <div sec:authorize="!isAuthenticated()">
-       <a href="/login">Login</a>
-     </div>
 
-  <!-- login solo se non sei loggato puoi registrarti-->
-   <div sec:authorize="!isAuthenticated()">
-     	<a href="/register">Register</a>
-   </div>
 	
 </body>
 </html>

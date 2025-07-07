@@ -24,15 +24,17 @@
         <div th:if="${book}">
             <div class="book-details">
                 <!-- Immagine del libro -->
-                <div class="book-image">
-                    <img th:if="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
-                         th:src="@{/${book.urlImages[0]}}" 
-                         th:alt="${book.title}" width="300" />
-                    <div th:unless="${book.urlImages != null and #lists.size(book.urlImages) > 0}" 
-                         style="width: 300px; height: 400px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #666;">
-                        📚<br>Copertina non disponibile
-                    </div>
-                </div>
+				<div class="book-cover">
+				                   <img th:if="${book.urlImage != null and book.urlImage != ''}"
+				                        th:src="@{${book.urlImage}}"
+				                        alt="Copertina libro"
+				                        width="150" height="220" />
+
+				                   <div th:unless="${book.urlImage != null and book.urlImage != ''}" 
+				                        style="width: 150px; height: 220px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: #888;">
+				                       📘<br>Copertina<br>non disponibile
+				                   </div>
+				               </div>
 
                 <!-- Informazioni del libro -->
                 <div class="book-info">
@@ -55,46 +57,51 @@
                 </div>
             </div>
 
-            <!-- Sezione recensioni -->
-            <div class="review-section">
-                <h2>Recensioni degli utenti</h2>
-
-				<div th:if="${book.reviews != null and !book.reviews.isEmpty()}">
-				      <ul>
-				  <li th:each="review : ${book.reviews}">
-				    <strong th:text="${review.user.credentials.username}">Username</strong>:
-				    <span th:text="${review.text}">Review text</span>
-				    <span class="rating" th:text="${'[' + review.evaluation + '/5]'}">[5/5]</span>
-
-				    <br/>
-				    <small th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}"></small>
-
-				     
-					<form th:action="@{/deleteReview}" method="post" style="display:inline" 
-					      th:if="${#authentication.name == review.user.credentials.username}">
-					    <input type="hidden" name="reviewId" th:value="${review.id}" />
-					    <button type="submit">Remove</button>
-					</form>
-
-				        
-				      </ul>
-				    </div>
+         
 
             <!-- Form per aggiungere una recensione (solo se loggato) -->
-            <div class="review-form" sec:authorize="isAuthenticated()">
-                <h2>Scrivi una recensione</h2>
-                <form th:action="@{/addReview}" method="post">
-                    <input type="hidden" name="bookId" th:value="${book.id}" />
+			<div class="review-section">
+			    <h2 class="demo-title">📝 Recensioni degli utenti</h2>
 
-                    <label for="text">Testo:</label><br>
-                    <textarea name="text" rows="4" cols="50" required></textarea><br>
+			    <div th:if="${book.reviews != null and !book.reviews.isEmpty()}">
+			        <ul class="reviews-list">
+			            <li class="review-card" th:each="review : ${book.reviews}">
+			                <div class="review-header">
+			                    <span class="review-username" th:text="${review.user.credentials.username}">Username</span>
+			                    <span class="review-rating" th:text="${'★'.repeat(review.evaluation)}"></span>
+			                </div>
+			                <p class="review-text" th:text="${review.text}">Testo recensione</p>
+			                <small class="review-date" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">Data</small>
 
-                    <label for="evaluation">Valutazione (1-5):</label><br>
-                    <input type="number" name="evaluation" min="1" max="5" required><br><br>
+			                <form th:action="@{/deleteReview}" method="post" th:if="${#authentication.name == review.user.credentials.username}">
+			                    <input type="hidden" name="reviewId" th:value="${review.id}" />
+			                    <button class="admin-button-danger-outline" type="submit">Rimuovi</button>
+			                </form>
+			            </li>
+			        </ul>
+			    </div>
 
-                    <button type="submit">Invia Recensione</button>
-                </form>
-            </div>
+			    <div class="review-form" sec:authorize="isAuthenticated()">
+			        <h3>Scrivi una recensione</h3>
+			        <form th:action="@{/addReview}" method="post" class="form-card">
+			            <input type="hidden" name="bookId" th:value="${book.id}" />
+			            <label for="text">Testo:</label>
+			            <textarea name="text" class="input-field" rows="4" required></textarea>
+
+			            <label for="evaluation">Valutazione (1-5):</label>
+			            <input type="number" name="evaluation" class="input-field" min="1" max="5" required>
+
+			            <div class="form-buttons">
+			                <button type="submit" class="auth-button save">Invia</button>
+			            </div>
+			        </form>
+			    </div>
+
+			    <div sec:authorize="!isAuthenticated()">
+			        <p><em>Effettua il <a href="/login">login</a> per scrivere una recensione.</em></p>
+			    </div>
+			</div>
+
 
             <!-- Messaggio se non loggato -->
             <div sec:authorize="!isAuthenticated()">
