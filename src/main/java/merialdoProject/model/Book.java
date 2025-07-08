@@ -33,8 +33,8 @@ public class Book {
 		@NotBlank
 		private String title;
 		
-		@Column(name = "url_images")
-		private List<String> urlImages;
+		@Column(name = "url_image")
+		private String urlImage;
 		
 		@ManyToMany
 		private List<Author> authors = new ArrayList<>();
@@ -70,12 +70,12 @@ public class Book {
 			this.title = title;
 		}
 
-		public List<String> getUrlImages() {
-			return urlImages;
+		public String getUrlImage() {
+			return urlImage;
 		}
 
-		public void setUrlImages(List<String> urlImages) {
-			this.urlImages = urlImages;
+		public void setUrlImage(String urlImage) {
+			this.urlImage = urlImage;
 		}
 
 		public List<Author> getAuthors() {
