@@ -124,7 +124,7 @@ public class siwBooksController {
 	    return "books.html";
 	}
 
-    
+    /*
 	@GetMapping("/api/search")
 	@ResponseBody
 	public Map<String, Object> search(@RequestParam("query") String query) {
@@ -136,6 +136,7 @@ public class siwBooksController {
 	    result.put("authors", authors);
 	    return result;
 	}
+	*/
 
 
 
